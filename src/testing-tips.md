@@ -27,7 +27,11 @@ test("initially empty list", async () => {
 #### Testing: key-value pairs
 
 ```tsx
-expect(screen.getByLabelText(/key/i)).toHaveTextContent(/value/i);
+const ddElement = screen.getByRole("definition", {
+  description: /text in dt term tag/i,
+});
+
+expect(ddElement).toHaveTextContent(/text in dd definition tag/i);
 
 function DefinitionItem({ term, description }) {
   const termId = useId();
@@ -35,11 +39,15 @@ function DefinitionItem({ term, description }) {
   return (
     <>
       <dt id={termId}>{term}</dt>
-      <dd aria-labelledby={termId}>{description}</dd>
+      <dd aria-describedby={termId}>{description}</dd> //🍒adds link to dt term
     </>
   );
 }
 ```
+
+> [!IMPORTANT]
+> aria-labelledby for dd is prohibited in [wai-aria 1.3](https://w3c.github.io/aria/#definition)
+> aria-labelledby for dd is recommended in [wai-aria 1.2](https://www.w3.org/TR/wai-aria-1.2/#definition)
 
 #### Debugging: logging roles
 
@@ -71,4 +79,32 @@ test("icon button", async () => {
 });
 
 <button aria-label={`button name`}>X</button>; //🍒button with no text
+```
+
+#### A11y: Association of section with header
+
+```tsx
+const article = screen.getByRole("article", { name: /post card/i });
+
+export function PostCard({ post, onLike, onDelete }: PostProps) {
+  return (
+    <article aria-labelledby="postCard">
+      <h3 id="postCard">Post card</h3>
+
+      <dl></dl>
+
+      <p>
+        <button aria-label="like post button" onClick={() => onLike(post.id)}>
+          👍
+        </button>
+        <button
+          aria-label="delete post button"
+          onClick={() => onDelete(post.id)}
+        >
+          🗑️
+        </button>
+      </p>
+    </article>
+  );
+}
 ```
