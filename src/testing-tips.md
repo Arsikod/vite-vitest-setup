@@ -1,3 +1,10 @@
+#### 🔗 A11y links:
+
+www.scottohara.me
+www.sarahmhigley.com
+www.inclusive-components.design
+www.heydonworks.com
+
 #### Testing: lists with header
 
 ```tsx
@@ -11,18 +18,21 @@ test("initially empty list", async () => {
   expect(cardsList).toBeEmptyDOMElement(); //🍒no children
 });
 
-<section>
-  <h2 id="header-id">Header name</h2>
-  //🍒adds name to "list" role
-  <ul aria-labelledby="header-id">
+<article>
+  <h2>Header name</h2>
+
+  <ul>
     {props.items.map((item) => (
       <li key={item.id}>
         <ItemCard onDelete={props.onDelete} {...item} />
       </li>
     ))}
   </ul>
-</section>;
+</article>;
 ```
+
+> [!TIP]
+> aria-labelledby [group lists](https://www.w3.org/WAI/WCAG21/Techniques/html/H48) > [recommendations on aria-labelledby](https://www.w3.org/TR/using-aria/#practical-support-aria-label-aria-labelledby-and-aria-describedby)
 
 #### Testing: key-value pairs
 
@@ -45,9 +55,10 @@ function DefinitionItem({ term, description }) {
 }
 ```
 
-> [!IMPORTANT]
+> [!TIP]
 > aria-labelledby for dd is prohibited in [wai-aria 1.3](https://w3c.github.io/aria/#definition)
 > aria-labelledby for dd is recommended in [wai-aria 1.2](https://www.w3.org/TR/wai-aria-1.2/#definition)
+> official discussion with my question [here](https://github.com/w3c/aria/issues/2074)
 
 #### Debugging: logging roles
 
@@ -91,8 +102,6 @@ export function PostCard({ post, onLike, onDelete }: PostProps) {
     <article aria-labelledby="postCard">
       <h3 id="postCard">Post card</h3>
 
-      <dl></dl>
-
       <p>
         <button aria-label="like post button" onClick={() => onLike(post.id)}>
           👍
@@ -108,3 +117,6 @@ export function PostCard({ post, onLike, onDelete }: PostProps) {
   );
 }
 ```
+
+> [!TIP]
+> aria-labelledby [regions and landmarks](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA13)
